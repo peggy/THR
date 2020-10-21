@@ -4,11 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>MHEHR邀約編輯介面</title>
     
-
-    <%-- 字體-Playfair Display --%>
-    <%--<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">--%>
-   <%-- <link href="Content/fonts_playfair.css" rel="stylesheet" />--%>
-
     <style type="text/css">
         /* 變更預設字型 */
         body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
