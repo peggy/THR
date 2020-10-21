@@ -30,17 +30,6 @@ public partial class store_query : System.Web.UI.Page
 
             counter(); //訪客計數
         }
-
-        if (Request.QueryString["bt"] != null)
-        {
-            btn_txt = Request.QueryString["bt"];
-            DB_class(Request.QueryString["bt"]);
-        }
-        else if (Request.QueryString["n"] != null)
-        {
-            tb_search_name.Text = Request.QueryString["n"];
-            DB_name();
-        }
     }
 
     //點擊類別，尋找dbo.hr_store相對應的資料
@@ -137,6 +126,7 @@ public partial class store_query : System.Web.UI.Page
         }
 
         //DataReader---------------------------------------------------------------------------------------
+        //201021：修改name as 名稱。BY PEGGY
         SqlDataReader dr = null;
         String SqlStr;
         if (str != null)
@@ -145,7 +135,7 @@ public partial class store_query : System.Web.UI.Page
         }
         else
         {
-            SqlStr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 店名, address as 地址,phone as 電話 from (select ROW_NUMBER() OVER(ORDER BY modify_time desc) AS 'RowNo', * from hr_store) as t Where t.RowNo Between @Page1 and @Page2";
+            SqlStr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 名稱, address as 地址,phone as 電話 from (select ROW_NUMBER() OVER(ORDER BY modify_time desc) AS 'RowNo', * from hr_store) as t Where t.RowNo Between @Page1 and @Page2";
         }
 
         //新增ROWNUMBER資料欄 照順序排列
@@ -291,13 +281,14 @@ public partial class store_query : System.Web.UI.Page
     }
 
     //讀取類別資料
-    //事件呼叫：PageLoad、btn_Class_Click
+    //事件呼叫：btn_Class_Click
     public void DB_class (string btn_txt)
     {
+        //201021：修改name as 名稱。BY PEGGY
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
         Conn.Open();
         SqlDataReader dr = null;
-        string sqlstr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 店名, address as 地址,phone as 電話 from HR_store where class like '%' + @my_class + '%' order by id desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
+        string sqlstr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 名稱, address as 地址,phone as 電話 from HR_store where class like '%' + @my_class + '%' order by id desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
         SqlCommand cmd = new SqlCommand(sqlstr, Conn);
         cmd.Parameters.Add("@my_class", SqlDbType.VarChar, 20);
         cmd.Parameters["@my_class"].Value = btn_txt;
@@ -322,13 +313,14 @@ public partial class store_query : System.Web.UI.Page
     }
 
     //讀取店名字串的資料
-    //事件呼叫：PageLoad、tb_search_name_TextChanged
+    //事件呼叫：tb_search_name_TextChanged
     public void DB_name ()
     {
+        //201021：修改name as 名稱。BY PEGGY
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
         Conn.Open();
         SqlDataReader dr = null;
-        string sqlstr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 店名, address as 地址,phone as 電話 from HR_store where name like '%' + @my_name + '%' order by id desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
+        string sqlstr = "Select Right('000' + Cast(id as varchar),3) as ID, class as 屬性, name as 名稱, address as 地址,phone as 電話 from HR_store where name like '%' + @my_name + '%' order by id desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
         SqlCommand cmd = new SqlCommand(sqlstr, Conn);
 
         if (tb_search_name.Text != "")
