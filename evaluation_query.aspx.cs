@@ -226,6 +226,10 @@ public partial class evaluation_query : System.Web.UI.Page
             {
                 e.Row.Attributes.Add("style", "color:#8E9EAB");
             }
+            if (e.Row.Cells[8].Text == "結案")
+            {
+                e.Row.Attributes.Add("style", "color:#8E9AAF");
+            }
         }
     }
 
