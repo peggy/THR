@@ -49,7 +49,7 @@ public partial class evaluation_edit : System.Web.UI.Page
             btn_submit.Visible = true;
             btn_hr_check.Visible = true;
         }
-        else if (arr_auth[0] == "10") //主要負責人：HR
+        else if (arr_auth[0] == "10" || arr_auth[0] == "11") //主要負責人：HR。10：課長、11：HR
         {
             btn_insert.Visible = true;
             btn_delete.Visible = true;
@@ -62,7 +62,11 @@ public partial class evaluation_edit : System.Web.UI.Page
             tb_e_modify_user.Visible = true;
             tb_ep_hr_remark.Visible = true;
             btn_hr_check.Visible = true;
-        }    
+            if (arr_auth[0] == "10") //201028_雅婷：身兼jackie主管考核。BY PEGGY
+            {
+                btn_submit.Visible = true;
+            }
+        }
         else if (arr_auth[0] == "20" || arr_auth[0] == "21") //使用者：主管
         {
             btn_submit.Visible = true;
@@ -675,7 +679,7 @@ public partial class evaluation_edit : System.Web.UI.Page
     private void set_radio_button(string rb_value, params RadioButton[] radio_button_group)
     {
         int value = Convert.ToInt32(rb_value);
-        for (int i = 0;i <= radio_button_group.Length; i++)
+        for (int i = 1;i <= radio_button_group.Length; i++)
         {
             if (i == value)
             {
