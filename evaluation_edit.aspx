@@ -160,8 +160,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -190,8 +190,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -220,8 +220,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -250,8 +250,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -280,8 +280,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -302,21 +302,6 @@
         </div>
 
         <br />
-        <div class="row justify-content-center">
-            <div class="col-10 col-xl-10 col-sm-10 border text-left bg-light" style="padding-top: 10px; padding-left: 10px">
-                <b>6. 綜合表現</b>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-10 col-xl-10 col-sm-10 border text-left" style="padding-top: 10px; padding-left: 10px; padding-bottom: 10px">
-                <asp:TextBox ID="tb_ep_Comprehensive" runat="server" Width="800px" Height="80px" TextMode="MultiLine"></asp:TextBox>
-            </div>
-        </div>
-        <div class="row justify-content-center" style="height: 30px;">
-            <div class="col-10 col-xl-10 col-sm-10 text-left" style="padding-left: 10px;">
-                <asp:Label ID="lb_ep_remark1" runat="server" class="text-secondary text-left" Style="font-size: small" Text="備註：通過標準應為5項等級皆在普通以上，若有其中1項為尚可，則需特別敘述特例通過之原因。"></asp:Label>
-            </div>
-        </div>
     </div>
 
     <br />
@@ -337,8 +322,8 @@
             <div class="col-10 col-xl-2 col-sm-2 border">特優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">優</div>
             <div class="col-10 col-xl-2 col-sm-2 border">普通</div>
-            <div class="col-10 col-xl-2 col-sm-2 border">尚可</div>
             <div class="col-10 col-xl-2 col-sm-2 border">差</div>
+            <div class="col-10 col-xl-2 col-sm-2 border">特差</div>
         </div>
         <div class="row justify-content-center" style="height: 30px;">
             <div class="col-10 col-xl-2 col-sm-2 border">
@@ -357,9 +342,19 @@
                 <asp:RadioButton ID="rb_ep_level_1" runat="server" GroupName="rb_e_level" />
             </div>
         </div>
-        <div class="row justify-content-center" style="height: 30px;">
+        <div class="row justify-content-center" style="height: 40px;">
             <div class="col-10 col-xl-10 col-sm-10 text-left" style="padding-left: 10px;">
                 <asp:Label ID="lb_ep_remark2" runat="server" class="text-secondary text-left" Style="font-size: small" Text="備註：通過標準之等級應在普通以上。"></asp:Label>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-xl-10 col-sm-10 border bg-light" style="padding-top: 10px; padding-left: 10px">
+                <b>綜合評比   </b><asp:Label ID="lb_comprehensive" runat="server" Text="* 必填" ForeColor="Red" Font-Size="Small"></asp:Label>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-xl-10 col-sm-10 border" style="padding-top: 10px; padding-left: 10px; padding-bottom: 10px">
+                <asp:TextBox ID="tb_ep_Comprehensive" runat="server" Width="800px" Height="80px" TextMode="MultiLine"></asp:TextBox>
             </div>
         </div>
         <br />
@@ -412,12 +407,12 @@
         <br />
         
         <div class="row justify-content-center">
-            <div class="col-10 col-xl-10 col-sm-10 border text-left bg-light" style="padding-top: 10px; padding-left: 10px">
+            <div class="col-10 col-xl-10 col-sm-10 border bg-light" style="padding-top: 10px; padding-left: 10px">
                 <b>人事註記</b>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-10 col-xl-10 col-sm-10 border text-left" style="padding-top: 10px; padding-left: 10px; padding-bottom: 10px">
+            <div class="col-10 col-xl-10 col-sm-10 border" style="padding-top: 10px; padding-left: 10px; padding-bottom: 10px">
                 <asp:TextBox ID="tb_ep_hr_remark" runat="server" Width="800px" Height="80px" TextMode="MultiLine" Visible="False"></asp:TextBox>
             </div>
         </div>
