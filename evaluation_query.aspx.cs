@@ -102,6 +102,9 @@ public partial class evaluation_query : System.Web.UI.Page
     //資料庫-binding candidate gridview
     protected void DBInit()
     {
+        string[] str_s = Session["OK"].ToString().Split('-');
+        string[] arr_auth = DB_authority(str_s[1]);
+
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
         Conn.Open();
         SqlDataReader dr = null;
@@ -116,6 +119,15 @@ public partial class evaluation_query : System.Web.UI.Page
             "and e_dept like '%' + @my_e_dept + '%' " +
             "and e_opening like '%' + @my_e_opening + '%' ");
 
+        if (arr_auth[0] == "21")
+        {
+            sqlsb.Append(" and e_dept in  ('生產部', '工程課', '生管課', '安環課', '物料課', '品管課', '倉管課', '製造課', '製程課') ");
+        }
+        else
+        {
+            sqlsb.Append("and e_dept like '%' + @my_e_dept + '%' ");
+        }
+      
         if (rbl_ep_a_state.SelectedIndex >= 0)
         {
             sqlsb.Append(" and ep_a_state like '%' + @my_ep_a_state + '%'");
