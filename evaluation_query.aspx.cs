@@ -116,10 +116,9 @@ public partial class evaluation_query : System.Web.UI.Page
             "select e_id as 序號,e_empno as 工號, e_name as 姓名, e_opening as 職稱, e_dept as 部門, e_change as 項目, e_start_date as 考核開始日, e_end_date as 考核結束日, ep_a_state as 狀態 " +
             "from dbo.HR_evaluation " +
             "where e_empno like '%' + @my_e_empno + '%' " +
-            "and e_dept like '%' + @my_e_dept + '%' " +
             "and e_opening like '%' + @my_e_opening + '%' ");
 
-        if (arr_auth[0] == "21")
+        if (arr_auth[0] == "21" && ddl_e_dept.SelectedValue == "%")
         {
             sqlsb.Append(" and e_dept in  ('生產部', '工程課', '生管課', '安環課', '物料課', '品管課', '倉管課', '製造課', '製程課') ");
         }
