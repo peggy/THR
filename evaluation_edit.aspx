@@ -3,10 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>MHEHR考核人員資料</title>
-    <%-- 字體-Playfair Display --%>
-    <%--<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">--%>
-   <%-- <link href="Content/fonts_playfair.css" rel="stylesheet" />--%>
-
     <style type="text/css">
         /* 變更預設字型 */
         body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
