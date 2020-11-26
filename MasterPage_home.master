@@ -17,7 +17,7 @@
     <link href="packages/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker-standalone.css" rel="stylesheet" />
     <link href="packages/glyphicons-only-bootstrap-master/css/bootstrap.css" rel="stylesheet" />
     <!-- jQuery -->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="Content/jQuery-ui.css" rel="stylesheet" />
     <%--<link rel="stylesheet" href="/resources/demos/style.css">--%>
     <script src="Scripts/jquery-1.12.1.js"></script>
 
@@ -193,6 +193,9 @@
                             <asp:Label ID="lb_public" runat="server" Text="公佈欄"></asp:Label>
                         </a>
                        <ul class="dropdown-menu">
+                           <li>
+                            <asp:LinkButton ID="lbtn_extension" Class="dropdown-item hya" runat="server"  PostBackUrl="~/extension.aspx">分機表</asp:LinkButton>
+                            </li>
                             <li>
                             <asp:LinkButton ID="lbtn_store_all" Class="dropdown-item hya" runat="server"  OnClick="lbtn_store_query_Click" Visible="False">特約商店</asp:LinkButton>
                             </li>
@@ -207,7 +210,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <%-- 第二層選項 --%>
+                                <asp:LinkButton ID="lbtn_extension_edit" Class="dropdown-item hya" runat="server"  PostBackUrl="~/extension_edit.aspx" Visible="False">分機表編輯</asp:LinkButton>
                             </li>
                         </ul>
                     </li>

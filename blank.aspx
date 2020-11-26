@@ -4,7 +4,6 @@
    
 
      <%-- 字體-Playfair Display --%>
-<%--    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">--%>
     <link href="Content/fonts_playfair.css" rel="stylesheet" />
 
     <style type="text/css">

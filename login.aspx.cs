@@ -78,7 +78,7 @@ public partial class login : class_login
         }
         catch (Exception ex)
         {
-            Response.Write("<script language='javascript'>alert('使用者名稱或密碼不正確');</script>");
+            Response.Write(ex);
         }
 
     }
