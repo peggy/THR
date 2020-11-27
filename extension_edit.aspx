@@ -13,7 +13,7 @@
         }
 
         .col {
-            padding-top: 10px;
+            padding-top: 20px;
         }
     </style>
 </asp:Content>
@@ -33,10 +33,6 @@
 
         <div class="row justify-content-center">
             <div class="col">
-                <asp:Button ID="btn_delete" runat="server" Text="刪除" class="btn btn-outline-dark" OnClick="btn_delete_Click" />
-                &nbsp;&nbsp;&nbsp;
-            <asp:Button ID="btn_update" runat="server" Text="修改" class="btn btn-outline-dark" OnClick="btn_update_Click" />
-                &nbsp;&nbsp;&nbsp;
             <asp:Button ID="btn_insert" runat="server" Text="新增" class="btn btn-outline-dark" OnClick="btn_insert_Click" />
             </div>
         </div>
@@ -77,10 +73,10 @@
                 <asp:TextBox ID="tb_ext_name" runat="server" Class="form-control" AutoPostBack="True" OnTextChanged="tb_ext_name_TextChanged"></asp:TextBox>
             </div>
             <div class="col text-center">
-                <asp:DropDownList ID="ddl_dept" runat="server"  Class="form-control" AutoPostBack="True" OnSelectedIndexChanged="ddl_dept_SelectedIndexChanged">
+                <asp:DropDownList ID="ddl_dept" runat="server" Class="form-control" AutoPostBack="True" OnSelectedIndexChanged="ddl_dept_SelectedIndexChanged">
                     <asp:ListItem Value="%">請選擇</asp:ListItem>
                 </asp:DropDownList>
-                <asp:RadioButtonList ID="rbl_dept" runat="server" RepeatDirection="Horizontal" Visible="False" AutoPostBack="True"  Class="form-control border-0" OnSelectedIndexChanged="rbl_dept_SelectedIndexChanged">
+                <asp:RadioButtonList ID="rbl_dept" runat="server" RepeatDirection="Horizontal" Visible="False" AutoPostBack="True" Class="form-control border-0" OnSelectedIndexChanged="rbl_dept_SelectedIndexChanged">
                     <asp:ListItem>&nbsp;常日&nbsp;&nbsp;</asp:ListItem>
                     <asp:ListItem>&nbsp;輪班</asp:ListItem>
                 </asp:RadioButtonList>
@@ -90,6 +86,29 @@
                 <asp:TextBox ID="tb_ext_phone" runat="server" Class="form-control" AutoPostBack="True" OnTextChanged="tb_ext_phone_TextChanged"></asp:TextBox>
             </div>
             <div class="col text-center"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">
+                <asp:GridView ID="gv_extension_edit" runat="server" class="table table-hover table-bordered text-center" DataKeyNames="ext_name" OnRowCancelingEdit="gv_extension_edit_RowCancelingEdit" OnRowDataBound="gv_extension_edit_RowDataBound" OnRowDeleting="gv_extension_edit_RowDeleting" OnRowEditing="gv_extension_edit_RowEditing" OnRowUpdating="gv_extension_edit_RowUpdating">
+                <Columns>
+                    <asp:TemplateField>
+                        <EditItemTemplate>
+                            <asp:Button ID="btn_update" runat="server" CommandName="Update" Text="更新" />
+                            &nbsp;<asp:Button ID="btn_cancel" runat="server" CommandName="cancel" Text="取消" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Button ID="btn_edit" runat="server" CommandName="Edit" Text="編輯" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="btn_delete" runat="server" CommandName="Delete" Text="刪除" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+            </div>
+            
         </div>
     </div>
 

@@ -13,7 +13,7 @@ public partial class extension_edit : class_login
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        btn_delete.Attributes.Add("onclick ", "return confirm( '確定要刪除嗎?');"); //確定按下「刪除」按鈕 跳出提示訊息：確定即刪除；取消即返回
+       
         if (!IsPostBack)//第一次執行本程式
         {
             DB_init_dept();
@@ -25,52 +25,15 @@ public partial class extension_edit : class_login
     {
         string sql_cmd = "INSERT INTO [dbo].[IT_extension]" +
             "([id_name] ,[id_dept] ,[ext] ,[ext_phone] ,[class] ,[ext_name] ,[dept]) " +
-            "Values ( @my_id_name, @my_id_dept ,@my_ext ,@My_ext_phone, @my_class, @my_ext_name, @my_dept ) ";
+            "Values ( @my_id_name, @my_id_dept ,@my_ext ,@my_ext_phone, @my_class, @my_ext_name, @my_dept ) ";
 
         DB_store(sql_cmd);
 
         record_extension_log("extension_log", "新增資料。姓名：" + tb_ext_name.Text + "。部門：" + ddl_dept.SelectedValue + "。手機簡碼：" + tb_ext_phone.Text);
         Response.Write("<script language='javascript'>alert('新增完成! 姓名：" + tb_ext_name.Text + "'); </script>");
+        DB_init_gv();
     }
 
-    //修改
-    protected void btn_update_Click(object sender, EventArgs e)
-    {
-        string sql_cmd = "UPDATE [dbo].[IT_extension] " +
-             "SET [id_name] = @my_id_name , [id_dept] = @my_id_dept ,[ext] = @my_ext ,[ext_phone] = @My_ext_phone , [class] = @my_class ,[ext_name] = @my_ext_name ,[dept] = @my_dept " +
-             "WHERE [id_name] = @my_id_name";
-
-        DB_store(sql_cmd);
-
-        record_extension_log("extension_log", "修改資料。姓名：" + tb_ext_name.Text + "。部門：" + ddl_dept.SelectedValue + "。手機簡碼：" + tb_ext_phone.Text);
-        Response.Write("<script language='javascript'>alert('修改完成! 姓名：" + tb_ext_name.Text + "'); </script>");
-    }
-
-    //刪除：點擊「刪除」刪掉一筆資料
-    //[在PageLoad事件 會先判斷是否有點擊按鈕 並 跳出訊息框 確認是否要刪除]
-    protected void btn_delete_Click(object sender, EventArgs e)
-    {
-        SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
-        Conn.Open();
-
-
-        SqlCommand Deletecmd = new SqlCommand("delete from [IT_extension] where [ext_name] = @my_ext_name", Conn);
-        Deletecmd.Parameters.Add("@my_ext_name", SqlDbType.VarChar, 10);
-        Deletecmd.Parameters["@my_ext_name"].Value = tb_ext_name.Text;
-
-        Deletecmd.ExecuteNonQuery();
-
-        Deletecmd.Cancel();
-        //----關閉DataReader之前，一定要先「取消」SqlCommand
-
-        if (Conn.State == ConnectionState.Open)
-        {
-            Conn.Close();
-            Conn.Dispose();
-        }
-        record_extension_log("extension_log", "刪除資料。姓名：" + tb_ext_name.Text + "。部門：" + ddl_dept.SelectedValue + "。手機簡碼：" + tb_ext_phone.Text);
-        Response.Write("<script language='javascript'>alert('刪除一筆資料完成! 姓名：" + tb_ext_name.Text + "'); location.href='extension.aspx'; </script>");
-    }
 
     //讀取資料表，綁定ddl_dept的部門
     private void DB_init_dept()
@@ -98,52 +61,25 @@ public partial class extension_edit : class_login
         if (Conn.State == ConnectionState.Open)
         {
             Conn.Close();
+            Conn.Dispose();
         }
     }
 
-    //讀取資料表：判斷姓名，帶入部門的序號及人員序號
+    //讀取資料表：判斷姓名，帶入部門的序號及人員序號---
     protected void tb_ext_name_TextChanged(object sender, EventArgs e)
     {
-        SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
-        Conn.Open();
-
-        string sql_str = "select id_name,id_dept,ext,class,ext_phone,dept from IT_extension where ext_name = @my_ext_name";
-        SqlCommand cmd = new SqlCommand(sql_str, Conn);
-        cmd.Parameters.Add("@my_ext_name", SqlDbType.VarChar, 10);
-        cmd.Parameters["@my_ext_name"].Value = tb_ext_name.Text; //姓名
-        SqlDataReader dr = cmd.ExecuteReader();
-        if (dr.HasRows)
-        {
-            while (dr.Read())
-            {
-                tb_id_name.Text = dr[0].ToString();
-                tb_id_dept.Text = dr[1].ToString();
-                tb_ext.Text = dr[2].ToString();
-                tb_class.Text = dr[3].ToString();
-                tb_ext_phone.Text = dr[4].ToString();
-                ddl_dept.SelectedValue = dr[5].ToString();
-            }
-        }
-        else
-        {
-            tb_id_name.Text = "";
-            tb_id_dept.Text = "";
-            ddl_dept.SelectedValue = "%";
-        }
-        if (dr != null)
-        {
-            cmd.Cancel();
-            dr.Close();
-        }
-        if (Conn.State == ConnectionState.Open)
-        {
-            Conn.Close();
-        }
+        ddl_dept.SelectedValue = "%";
+        //tb_id_name.Text = "";
+        //tb_id_dept.Text = "";
+        //tb_ext.Text = "";
+        //tb_class.Text = "";
+        //tb_ext_phone.Text = "";
     }
 
     //讀取資料表：判斷部門，帶入部門的序號及人員序號
     protected void ddl_dept_SelectedIndexChanged(object sender, EventArgs e)
     {
+        DB_init_gv();
         if (tb_ext_name.Text != "")
         {
             SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
@@ -240,7 +176,6 @@ public partial class extension_edit : class_login
         }
     }
 
-
     //讀取資料表，判斷手機簡碼是否重複
     protected void tb_ext_phone_TextChanged(object sender, EventArgs e)
     {
@@ -263,7 +198,7 @@ public partial class extension_edit : class_login
         tb_ext.Text = tb_ext_phone.Text.Substring(1, 4);
     }
 
-
+    //讀取資料表
     private void DB_store(string sql_str)
     {
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
@@ -273,10 +208,10 @@ public partial class extension_edit : class_login
 
         SqlCommand cmd = new SqlCommand(sql_cmd, Conn);
 
-        cmd.Parameters.Add("@my_id_name", SqlDbType.VarChar, 10);
+        cmd.Parameters.Add("@my_id_name", SqlDbType.Decimal, 10);
         cmd.Parameters["@my_id_name"].Value = tb_id_name.Text; //人員序號
 
-        cmd.Parameters.Add("@my_id_dept", SqlDbType.VarChar, 10);
+        cmd.Parameters.Add("@my_id_dept", SqlDbType.Decimal, 10);
         cmd.Parameters["@my_id_dept"].Value = tb_id_dept.Text; //部門序號
 
         cmd.Parameters.Add("@my_ext", SqlDbType.VarChar, 10);
@@ -286,7 +221,7 @@ public partial class extension_edit : class_login
         cmd.Parameters["@my_ext_phone"].Value = tb_ext_phone.Text; //手機簡碼
 
         cmd.Parameters.Add("@my_class", SqlDbType.VarChar, 10);
-        cmd.Parameters["@my_class"].Value = tb_class.Text; //手機簡碼
+        cmd.Parameters["@my_class"].Value = tb_class.Text; //類別
 
         cmd.Parameters.Add("@my_ext_name", SqlDbType.VarChar, 10);
         cmd.Parameters["@my_ext_name"].Value = tb_ext_name.Text; //姓名
@@ -306,6 +241,146 @@ public partial class extension_edit : class_login
     }
 
 
+    //GridView
+    #region 
+    //GridView 確認刪除
+    protected void gv_extension_edit_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            //刪除確認
+            Button d_button = (Button)e.Row.Cells[2].FindControl("btn_delete");
+            d_button.OnClientClick = "javascript:return confirm('確定刪除?')";
+        }
+    }
+    //GridView 編輯模式
+    protected void gv_extension_edit_RowEditing(object sender, GridViewEditEventArgs e)
+    {
+        gv_extension_edit.EditIndex = e.NewEditIndex;
+        DB_init_gv();
+    }
+
+    //GridView 離開編輯模式
+    protected void gv_extension_edit_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+    {
+        gv_extension_edit.EditIndex = -1;
+        DB_init_gv();
+    }
+    //GridView 刪除
+    protected void gv_extension_edit_RowDeleting(object sender, GridViewDeleteEventArgs e)
+    {
+        SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
+        Conn.Open();
+
+        SqlDataReader dr = null;
+        SqlCommand Deletecmd = new SqlCommand("delete from [IT_extension] where [ext_name] = @my_ext_name", Conn);
+        Deletecmd.Parameters.Add("@my_ext_name", SqlDbType.VarChar, 10);
+        Deletecmd.Parameters["@my_ext_name"].Value = gv_extension_edit.DataKeys[e.RowIndex].Value; //姓名
+
+        Deletecmd.ExecuteNonQuery();
+
+        if (dr != null)
+        {
+            Deletecmd.Cancel();
+            //----關閉DataReader之前，一定要先「取消」SqlCommand
+            dr.Close();
+        }
+        if (Conn.State == ConnectionState.Open)
+        {
+            Conn.Close();
+            Conn.Dispose();
+        }
+        record_extension_log("extension_log", "刪除資料。姓名：" + tb_ext_name.Text + "。部門：" + ddl_dept.SelectedValue + "。手機簡碼：" + tb_ext_phone.Text);
+        Response.Write("<script language='javascript'>alert('刪除一筆資料完成! 姓名：" + tb_ext_name.Text + "');</script>");
+
+        DB_init_gv();
+    }
+
+    //GridView 更新
+    protected void gv_extension_edit_RowUpdating(object sender, GridViewUpdateEventArgs e)
+    {
+        TextBox myt_id_name, myt_id_dept, myt_ext,myt_ext_phone,myt_class,myt_dept;
+        myt_id_name = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[2].Controls[0]; //人名序號
+        myt_id_dept = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[3].Controls[0]; //部門序號
+        myt_ext = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[4].Controls[0]; //分機
+        myt_ext_phone = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[5].Controls[0]; //手機簡碼
+        myt_class = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[6].Controls[0]; //類別
+        myt_dept = (TextBox)gv_extension_edit.Rows[e.RowIndex].Cells[8].Controls[0]; //課室
+
+        SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
+        Conn.Open();
+
+        string sql_cmd = "UPDATE [dbo].[IT_extension] " +
+             "SET [id_name] = @my_id_name , [id_dept] = @my_id_dept ,[ext] = @my_ext ,[ext_phone] = @my_ext_phone , [class] = @my_class ,[dept] = @my_dept " +
+             "WHERE [ext_name] = @my_ext_name";
+
+        SqlCommand cmd = new SqlCommand(sql_cmd, Conn);
+
+        cmd.Parameters.Add("@my_id_name", SqlDbType.Decimal, 10);
+        cmd.Parameters["@my_id_name"].Value = myt_id_name.Text; //人員序號
+
+        cmd.Parameters.Add("@my_id_dept", SqlDbType.Decimal, 10);
+        cmd.Parameters["@my_id_dept"].Value = myt_id_dept.Text; //部門序號
+
+        cmd.Parameters.Add("@my_ext", SqlDbType.VarChar, 10);
+        cmd.Parameters["@my_ext"].Value = myt_ext.Text; //分機
+
+        cmd.Parameters.Add("@my_ext_phone", SqlDbType.VarChar, 10);
+        cmd.Parameters["@my_ext_phone"].Value = myt_ext_phone.Text; //手機簡碼
+
+        cmd.Parameters.Add("@my_class", SqlDbType.VarChar, 5);
+        cmd.Parameters["@my_class"].Value = myt_class.Text; //類別
+
+        cmd.Parameters.Add("@my_dept", SqlDbType.VarChar, 10);
+        cmd.Parameters["@my_dept"].Value = myt_dept.Text; //課室
+
+        cmd.Parameters.Add("@my_ext_name", SqlDbType.VarChar, 10);
+        cmd.Parameters["@my_ext_name"].Value = gv_extension_edit.DataKeys[e.RowIndex].Value; //姓名
+
+        cmd.ExecuteNonQuery();
+
+        cmd.Cancel();
+
+        if (Conn.State == ConnectionState.Open)
+        {
+            Conn.Close();
+            Conn.Dispose();
+        }
+        record_extension_log("extension_log", "修改資料。姓名：" + tb_ext_name.Text + "。部門：" + ddl_dept.SelectedValue + "。手機簡碼：" + tb_ext_phone.Text);
+
+        gv_extension_edit.EditIndex = -1;
+        DB_init_gv();
+        
+    }
 
     
+    //讀取資料表，綁定GridView
+    public void DB_init_gv()
+    {
+        SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
+        Conn.Open();
+        //綁定部門
+        string sql_str = "SELECT *  FROM [dbo].[IT_extension] where dept = @my_dept order by id_name";
+        SqlCommand cmd = new SqlCommand(sql_str, Conn);
+        cmd.Parameters.Add("@my_dept", SqlDbType.VarChar, 10);
+        cmd.Parameters["@my_dept"].Value = ddl_dept.SelectedValue; //部門
+        SqlDataReader dr = cmd.ExecuteReader();
+
+        if (dr.HasRows)
+        {
+            gv_extension_edit.DataSource = dr;
+            gv_extension_edit.DataBind();
+        }
+        if (dr != null)
+        {
+            cmd.Cancel();
+            dr.Close();
+        }
+        if (Conn.State == ConnectionState.Open)
+        {
+            Conn.Close();
+            Conn.Dispose();
+        }
+    }
+    #endregion
 }
