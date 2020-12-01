@@ -13,6 +13,7 @@ using System.DirectoryServices; //需加入參考。AD使用
 using System.Runtime.InteropServices;
 
 using System.IO; //檔案讀寫
+using System.Text.RegularExpressions;
 
 public partial class login : class_login
 {
@@ -34,7 +35,8 @@ public partial class login : class_login
        
         string ad_id = tb_login_id.Text;
         string ad_ps = tb_login_pass.Text;
-
+        string strExpression = "^[0-9]*[1-9][0-9]*$"; //正規表達式：數字
+        Regex reg = new Regex(strExpression);
         DirectoryEntry ent = new DirectoryEntry("LDAP://mhe.com.tw/dc=mhe,dc=com,dc=tw", ad_id, ad_ps); //網域名稱 , 以 "."為分隔 ,接續帳號,密碼
         DirectorySearcher ds = new DirectorySearcher(ent); //建立 搜尋 AD的物件。利用 DirectorySearcher 類別來對 Active Directory 進行查詢
 
@@ -42,16 +44,30 @@ public partial class login : class_login
         ds.PropertiesToLoad.Add("sn"); //搜尋期間要擷取的屬性清單
         ds.SearchScope = SearchScope.Subtree;  //伺服器觀察的搜尋範圍
 
-        try
+        //非AD帳號
+        if (reg.IsMatch(tb_login_id.Text))
         {
+            if (DB_login_authority(ad_id, ad_ps, "NAD") != null)
+            {
+                Session["OK"] = DB_login_authority(ad_id, ad_ps, "NAD"); //儲存顯示名稱
+                Record("NAD"); //紀錄登入使用者
+                Response.Redirect("blank.aspx"); //登入成功跳轉空白頁面
+                return;
+            }
+        }
+
+        //AD帳號
+        try
+        { 
             SearchResult sr = ds.FindOne(); //搜尋到的第一個物件
             if (sr == null)
             {
+                //找不到帳號
                 Response.Write("找不到帳號");
             }
             else
             {
-                string[] atestarr = { "displayName", "department" };//顯示名稱,部門
+                string[] atestarr = { "displayName", "department", "userPrincipalName" };//顯示名稱,部門,帳號
 
                 if (sr.GetDirectoryEntry().Properties[atestarr[1]].Value != null) //部門不為空值
                 {
@@ -59,7 +75,7 @@ public partial class login : class_login
                     string att = sr.GetDirectoryEntry().Properties[atestarr[0]].Value.ToString();
                     string[] str_s = att.Split('-');
 
-                    if (DB_login_authority(str_s[1]) == 1)
+                    if (DB_login_authority(ad_id,ad_ps,"AD") == "1")
                     {
                         Session["OK"] = att; //儲存顯示名稱
                         Record(); //紀錄登入使用者
@@ -67,7 +83,7 @@ public partial class login : class_login
                     }
                     else
                     {
-                        Response.Write("<script language='javascript'>alert('無此權限登入失敗');</script>");
+                        Response.Write("<script language='javascript'>alert('無此權限登入失敗!!');</script>");
                     }
                 }
                 else //空值
@@ -84,10 +100,13 @@ public partial class login : class_login
     }
 
     //以文字檔寫入，紀錄登入使用者
-    public void Record()
+    public void Record([Optional]string type)
     {
+        string login_name = null;
+        
         string[] str_s = Session["OK"].ToString().Split('-');
-        string login_name = str_s[1];
+        login_name = str_s[1];
+
         //(務必修改這個檔案的權限，需要「寫入」的權限)
         //寫入檔案
         StreamWriter sw = new StreamWriter("C:\\Users\\peggy.liou\\Documents\\VS\\測試區\\HR\\file\\login_log.txt",true);
