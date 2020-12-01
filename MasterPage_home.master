@@ -20,9 +20,7 @@
 
     <!-- jQuery -->
     <link href="Content/jQuery-ui.css" rel="stylesheet" />
-
     <script src="Scripts/jquery-1.12.1.js"></script>
-
     <style type="text/css">
         /*背景圖*/
         .topheader {
@@ -69,7 +67,7 @@
 
     <script type='text/javascript'>
         //系統倒數登出(s)------------------------------------------------------------------------
-       setTimeout('countdown()', 1000); //1秒執行一次秒數的倒數
+        setTimeout('countdown()', 1000); //1秒執行一次秒數的倒數
         function countdown() {
             //有登入才開始倒數
             if (document.getElementById('<%=lb_login_name.ClientID %>').innerText != "") {
@@ -249,18 +247,19 @@
                             </div>
                         </li>
                     </ul>
+                    <hr class="d-block d-sm-block d-md-none" style="width:100%" />
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item dropdown dropdown-menu-right">
+                            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
+                                <asp:Label ID="lb_login_name" runat="server" Text="Label"></asp:Label>
+                            </a>
+                            <div class="dropdown-menu text-center dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <asp:LinkButton ID="lbtn_login" Class="dropdown-item hya" runat="server" OnClick="lbtn_login_Click">Login</asp:LinkButton>
+                                <a class="dropdown-item" style="font-size: smaller; display: none;" id="ddi_timer">倒數<span id='timer_min'>19 </span>分<span id='timer_sec'>59 </span>秒登出</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item dropdown dropleft">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <asp:Label ID="lb_login_name" runat="server" Text="Label"></asp:Label>
-                        </a>
-                        <div class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
-                            <asp:LinkButton ID="lbtn_login" Class="dropdown-item hya" runat="server" OnClick="lbtn_login_Click">Login</asp:LinkButton>
-                            <a class="dropdown-item" style="font-size: smaller; display: none;" id="ddi_timer">倒數<span id='timer_min'>19 </span>分<span id='timer_sec'>59 </span>秒登出</a>
-                        </div>
-                    </li>
-                </ul>
             </nav>
 
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
