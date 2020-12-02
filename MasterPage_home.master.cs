@@ -11,7 +11,6 @@ using System.Web.Configuration;
 
 using System.IO; //檔案讀寫
 
-
 public partial class MasterPage_home : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -25,7 +24,29 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
 
                 string[] str_s = Session["OK"].ToString().Split('-');
                 class_login cs_l = new class_login();
-                string[] arr_auth = cs_l.DB_authority(str_s[1],"masterpage");
+
+                //非AD帳號
+                string[] arr_auth_mhe_user = cs_l.DB_authority(str_s[1], "make"); 
+                if (arr_auth_mhe_user[0] == "1") //evaluation_make
+                {
+                    li_personal.Visible = true; //個人資料
+                    li_e.Visible = true; //考核
+                    lbtn_evaluation_make_all.Visible = true; //考核_製造課
+                }
+
+                //AD帳號
+                string[] arr_auth = cs_l.DB_authority(str_s[1], "masterpage");
+
+                if (arr_auth[2] == "99" || arr_auth[2] == "10") //store
+                {
+                    li_s.Visible = true; //特約商店_編輯
+                }
+
+                if (arr_auth[2] != "10") //store
+                {
+                    lbtn_store_all.Visible = true;
+                    li_public.Visible = true;
+                }
 
                 if (arr_auth[0] == "99" || arr_auth[0] == "10") //interview
                 {
@@ -36,30 +57,34 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
                 if (arr_auth[1] == "99" || arr_auth[1] == "10" || arr_auth[1] == "11") //evaluation
                 {
                     li_e.Visible = true; //考核
-                    lbtn_e_edit.Visible = true; //編輯
+                    li_ev.Visible = true; //考核_試用期_編輯
                 }
 
                 if (arr_auth[1] == "20" || arr_auth[1] == "21") //evaluation
-                { 
+                {
                     li_e.Visible = true; //考核
+                    lbtn_evaluation_all.Visible = true; //考核_試用期
                 }
 
-                if (arr_auth[2] == "99" || arr_auth[2] == "10") //store
+                if (arr_auth[4] == "99" || arr_auth[4] == "20") //personal,evaluation_make
                 {
-                    li_public.Visible = true;
-                    li_s.Visible = true;
+                    li_personal.Visible = true; //個人資料
+                    li_e.Visible = true; //考核
+                    li_ev_m.Visible = true; //考核_製造課_編輯
                 }
 
-                if (arr_auth[2] != "10") //store
+                if (arr_auth[4] == "10") //evaluation_make
                 {
-                    lbtn_store_all.Visible = true;
-                    li_public.Visible = true;
+                    lbtn_evaluation_make_all.Visible = true; //考核_製造課
                 }
 
-                if (arr_auth[3] == "99") //extension
+                if (arr_auth[2] == "99" || arr_auth[3] == "99" || arr_auth[4] == "99") 
                 {
-                    lbtn_extension_edit.Visible = true;
+                    lbtn_extension_edit.Visible = true; //3 extension
+                    lbtn_evaluation_all.Visible = true; //2 evaluation
+                    lbtn_evaluation_make_all.Visible = true; // 4 evaluation_make
                 }
+                
             }
             else
             {
@@ -69,7 +94,7 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
     }
 
     //邀約
-    //[預設值：導覽列點擊編輯頁面、edit畫面點擊新增按鈕皆帶入]
+    //[預設值：導覽列點擊編輯頁面帶入]
     protected void lbtn_interview_edit_Click(object sender, EventArgs e)
     {
 
@@ -80,9 +105,9 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
         //帶入新增的預設值(end)-----------------------------------------------------------------------
     }
 
-    //考核
-    //[預設值：導覽列點擊編輯頁面、edit畫面點擊新增按鈕皆帶入]
-    protected void lbtn_e_edit_Click(object sender, EventArgs e)
+    //考核_試用期
+    //[預設值：導覽列點擊編輯頁面帶入]
+    protected void lbtn_evaluation_edit_Click(object sender, EventArgs e)
     {
         string str_cmd = "select MAX(e_id) from dbo.HR_evaluation";
         string str_id = DB_insert(str_cmd,"year");
@@ -91,7 +116,7 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
     }
 
     //特約
-    //[預設值：導覽列點擊編輯頁面、edit畫面點擊新增按鈕皆帶入]
+    //[預設值：導覽列點擊編輯頁面帶入]
     protected void lbtn_store_edit_Click(object sender, EventArgs e)
     {
         string str_cmd = "select MAX(id) from dbo.HR_store";
@@ -120,7 +145,7 @@ public partial class MasterPage_home : System.Web.UI.MasterPage
 
     //帶入新增的預設值(start)
     //[事件呼叫：lbtn_interview_edit_Click、lbtn_e_edit_Click]
-    //[預設值：導覽列點擊編輯頁面、edit畫面點擊新增按鈕皆帶入]
+    //[預設值：導覽列點擊編輯頁面帶入]
     public string DB_insert(string str_db,string type)
     {
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);

@@ -72,13 +72,21 @@ public class class_login : System.Web.UI.Page
     //new-事件呼叫：masterpage_home
     public string[] DB_authority(string name,string type)
     {
-        string[] arr_auth = new string[4]; //修改：新增欄位權限
-
+        string[] arr_auth = new string[5]; //修改：新增欄位權限
+        string sql_str = null;
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
         Conn.Open();
         SqlDataReader dr = null;
 
-        SqlCommand cmd = new SqlCommand("select interview,evaluation,store,extension from dbo.hr_authority where name = @my_name", Conn);
+        if (type == "make")
+        {
+            sql_str = "SELECT evaluation_make FROM [dbo].[MHE_user] where make_us = @my_name";
+        }
+        else
+        {
+            sql_str = "select interview,evaluation,store,extension,evaluation_make from dbo.hr_authority where name = @my_name";
+        }
+        SqlCommand cmd = new SqlCommand(sql_str, Conn);
         cmd.Parameters.Add("@my_name", SqlDbType.VarChar, 20);
         cmd.Parameters["@my_name"].Value = name; //姓名
 
@@ -102,6 +110,10 @@ public class class_login : System.Web.UI.Page
                     else if (type == "masterpage")
                     {
                         arr_auth[i] = dr[i].ToString();
+                    }
+                    else if (type == "make")
+                    {
+                        arr_auth[i] = dr[0].ToString();
                     }
                 }
             }
