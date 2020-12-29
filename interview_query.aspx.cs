@@ -29,7 +29,10 @@ public partial class interview_query : System.Web.UI.Page
             SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
             Conn.Open();
             SqlDataReader dr = null;
-            string sqlstr = "select top(10) c_id as 序號, c_name as 姓名, c_opening as 職缺, i_time as 面試時間, r_time as 報到時間, a_state as 狀態, a_progress as 進度,c_modify_user as 修改人, c_modify_time as 修改時間 from HR_interview order by c_modify_time desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
+            string sqlstr = "select top(10) c_id as 序號, c_name as 姓名, c_opening as 職缺, " +
+                " convert(varchar(20),i_time,111) + '(' + right(datename(weekday,i_time),1) + ') ' + left(convert(varchar(20),i_time,8),5) as 面試時間," +
+                " convert(varchar(20),r_time,111) + '(' + right(datename(weekday,r_time),1) + ') ' + left(convert(varchar(20),r_time,8),5) as 報到時間," +
+                " a_state as 狀態, a_progress as 進度,c_modify_user as 修改人, c_modify_time as 修改時間 from HR_interview order by c_modify_time desc"; //200804：新增「修改人」查詢欄位。BY PEGGY
             SqlCommand cmd = new SqlCommand(sqlstr, Conn);
             dr = cmd.ExecuteReader();
 
@@ -66,13 +69,14 @@ public partial class interview_query : System.Web.UI.Page
         StringBuilder sqlsb = new StringBuilder();
 
         //以判斷是否有值才增加SQL篩選條件
-        sqlsb.Append("select c_id as 序號, c_name as 姓名, c_opening as 職缺, i_time as 面試時間, r_time as 報到時間, a_state as 狀態, a_progress as 進度,c_modify_user as 修改人, c_modify_time as 修改時間 from HR_interview " + //200804：新增「修改人」查詢欄位。BY PEGGY
+        sqlsb.Append("select c_id as 序號, c_name as 姓名, c_opening as 職缺, " +
+                "convert(varchar(20), i_time, 111) + '(' + right(datename(weekday, i_time), 1) + ') ' + left(convert(varchar(20), i_time, 8), 5) as 面試時間, " +
+                " convert(varchar(20),r_time,111) + '(' + right(datename(weekday,r_time),1) + ') ' + left(convert(varchar(20),r_time,8),5) as 報到時間," +
+                "a_state as 狀態, a_progress as 進度, c_modify_user as 修改人, c_modify_time as 修改時間 from HR_interview " + //200804：新增「修改人」查詢欄位。BY PEGGY
             "where a_state like '%' + @my_a_state + '%' " +
             "and c_name like '%' + @my_c_name + '%' " +
-            "and c_resume_no like '%' + @my_c_resume_no + '%' "+ //200804_家瑋：新增「履歷代碼」條件。BY PEGGY
+            "and c_resume_no like '%' + @my_c_resume_no + '%' " + //200804_家瑋：新增「履歷代碼」條件。BY PEGGY
             "and c_opening like '%' + @my_c_opening + '%' ");
-
-
 
         if (rbl_a_progress.SelectedValue == "進行中" || rbl_a_progress.SelectedValue == "結案")
         {
