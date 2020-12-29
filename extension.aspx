@@ -43,6 +43,7 @@
 
         <div class="row justify-content-center">
             <div class="col text-right" style="padding-bottom: 20px">
+                <asp:Label ID="lb_date" runat="server"></asp:Label>&nbsp;&nbsp;&nbsp;
                 <asp:DropDownList ID="ddl_export" runat="server" Class="btn btn-outline-secondary" Style="border-color: black;">
                     <asp:ListItem>請選擇</asp:ListItem>
                     <asp:ListItem>橫向</asp:ListItem>
