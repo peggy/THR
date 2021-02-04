@@ -6,6 +6,7 @@
 <head runat="server">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--BootStrap-->
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <script src="Scripts/jquery-3.0.0.min.js"></script>
@@ -19,7 +20,8 @@
     <link href="packages/glyphicons-only-bootstrap-master/css/bootstrap.css" rel="stylesheet" />
 
     <!-- jQuery -->
-    <link href="Content/jQuery-ui.css" rel="stylesheet" />
+    <%--<link href="Content/jQuery-ui.css" rel="stylesheet" />--%>
+    <link href="Content/jQuery-1.12.1-ui.css" rel="stylesheet" />
     <script src="Scripts/jquery-1.12.1.js"></script>
     <style type="text/css">
         /*背景圖*/
@@ -66,6 +68,8 @@
 
 
     <script type='text/javascript'>
+
+
         //系統倒數登出(s)------------------------------------------------------------------------
         setTimeout('countdown()', 1000); //1秒執行一次秒數的倒數
         function countdown() {
@@ -175,10 +179,21 @@
                 dateFormat: "yy-mm-dd"
             });
         });
-        //日期設置(e)----------------------------------------------------------------------------
 
+        ////班表
+        //jQuery(function () {
+        //    jQuery('#ContentPlaceHolder1_tb_cs_start_date').datepicker({
+        //        dateFormat: "yy-mm-dd"
+        //    });
+        //});
+
+        //jQuery(function () {
+        //    jQuery('#ContentPlaceHolder1_tb_cs_end_date').datepicker({
+        //        dateFormat: "yy-mm-dd"
+        //    });
+        //});
+        //日期設置(e)----------------------------------------------------------------------------        
     </script>
-
 
     <title></title>
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -192,10 +207,10 @@
                 <a class="navbar-brand" style="font-family: 'Playfair Display'">MHEHR</a>
 
                 <%-- 漢堡icon --%>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div id="navbar-collapse" class="navbar-collapse navbar-collapse">
+                <div id="navbar-collapse" class="collapse navbar-collapse" aria-expanded="false">
                     <ul class="navbar-nav">
                         <li class="dropdown" id="li_public" runat="server">
                             <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
@@ -224,13 +239,26 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown" id="li_personal" runat="server" visible="False">
+                        <li class="nav-item dropdown" id="li_p" runat="server">
                             <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
                                 <asp:Label ID="lb_personal" runat="server" Text="個人資料"></asp:Label>
                             </a>
                             <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
                                 <li>
-                                    <asp:LinkButton ID="lbtn_personal" Class="dropdown-item hya" runat="server">查詢</asp:LinkButton></li>
+                                    <asp:LinkButton ID="lbtn_personal" Class="dropdown-item hya" runat="server" PostBackUrl="~/personal.aspx">查詢</asp:LinkButton></li>
+                                <li>
+                                    <asp:LinkButton ID="lbtn_meal_all" Class="dropdown-item hya" runat="server" PostBackUrl="~/meal_edit.aspx" Visible="False">訂餐</asp:LinkButton></li>
+                                <li class="dropdown-submenu text-center" id="li_meal" runat="server" style="padding-top: 5px; padding-bottom: 5px" visible="False">
+                                    <asp:LinkButton ID="lbtn_meal" Class="dropdown-toggle hya" runat="server" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                   訂餐
+                                    </asp:LinkButton>
+                                    <ul class="dropdown-menu text-center">
+                                        <asp:LinkButton ID="lbtn_meal_query" Class="dropdown-item hya" runat="server" PostBackUrl="/meal_query.aspx">查詢</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtn_meal_edit" Class="dropdown-item hya" runat="server" PostBackUrl="/meal_edit.aspx">編輯</asp:LinkButton>
+                                    </ul>
+                                </li>
+                                <%--<li>
+                                    <asp:LinkButton ID="lbtn_class_schedule" Class="dropdown-item hya" runat="server" PostBackUrl="~/class_schedule.aspx" Visible="False">班表</asp:LinkButton></li>--%>
                             </ul>
                         </li>
 
@@ -254,7 +282,7 @@
                                 <li>
                                     <asp:LinkButton ID="lbtn_evaluation_all" Class="dropdown-item hya" runat="server" Visible="False" PostBackUrl="~/evaluation_query.aspx">試用期</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="lbtn_evaluation_make_all" Class="dropdown-item hya" runat="server" Visible="False">製造課</asp:LinkButton></li>
+                                    <asp:LinkButton ID="lbtn_evaluation_make_all" Class="dropdown-item hya" runat="server" Visible="False" PostBackUrl="~/evaluation_make_edit.aspx">製造課</asp:LinkButton></li>
 
                                 <li class="dropdown-submenu text-center" id="li_ev" runat="server" style="padding-top: 5px; padding-bottom: 5px" visible="False">
                                     <asp:LinkButton ID="lbtn_evaluation" Class="dropdown-toggle hya" runat="server" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -276,28 +304,50 @@
                                     </ul>
                                 </li>
                             </ul>
-
                         </li>
                     </ul>
                     <hr class="d-block d-sm-block d-md-none" style="width: 100%" />
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item dropdown dropdown-menu-right">
                             <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-                                <asp:Label ID="lb_login_name" runat="server" Text="Label"></asp:Label>
+                                <asp:Label ID="lb_login_name" runat="server" Text=""></asp:Label>
                             </a>
                             <div class="dropdown-menu text-center dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                 <asp:LinkButton ID="lbtn_login" Class="dropdown-item hya" runat="server" OnClick="lbtn_login_Click">Login</asp:LinkButton>
-                                <a class="dropdown-item" style="font-size: smaller; display: none;" id="ddi_timer">倒數<span id='timer_min'>19 </span>分<span id='timer_sec'>59 </span>秒登出</a>
+                                <asp:Label ID="lb_login_account" runat="server" Text="" Visible="False"></asp:Label>
+                                <a class="dropdown-item" style="font-size: smaller; display: none;" id="ddi_timer">倒數 
+                                    <span id='timer_min' runat="server">19 </span>分<span id='timer_sec'>59 </span>秒登出</a>
+                                <asp:Label ID="lb_login_state" runat="server" Text="" Visible="False"></asp:Label>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-
+            
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
 
         </div>
     </form>
+    <script>
+        (function () {
+            const txt = document.getElementById("lb_login_state");
+            if (txt.innerHTML == "1") {
+                localStorage.removeItem('logged_in');
+            }
+            window.addEventListener('storage', (event) => {
+                // 在使用者登出/登入時，透過改變LocalStorage的裝態來觸發此事件
+                if (event.key == 'logged_in' && event.newValue == 'true') {
+                    document.location.replace('/login.aspx');
+                }
+                else if (event.key == 'logged_in' && event.newValue == 'false') {
+                }
+                else {
+                    return;
+                }
+                //alert('You have ' + text + ' at another page. Please referesh your browser to update the page');
+            });
+        })();
+    </script>
 </body>
 </html>

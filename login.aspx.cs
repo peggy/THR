@@ -23,11 +23,18 @@ public partial class login : class_login
         {
             Session.Clear();
             Session.Abandon();
+
+            HttpBrowserCapabilities hbc = Request.Browser;
+            if (hbc.Browser.ToString() != "Chrome")
+            {
+                Response.Write("<script language='javascript'>alert('錯誤!請使用Chrome瀏覽器開啟');location.href='https://www.google.com/'</script>");
+            }
         }
     }
 
     protected void btn_login_login_Click(object sender, EventArgs e)
     {
+        //在blank.aspx.cs裡，判斷Session是否同一人登入，如在不同分頁重複開啟blank.aspx，javascript則原頁面會被導向login.aspx。
         Session["OK"] = "";
 
         SqlConnection Conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["HRConnectionString"].ConnectionString);
@@ -50,6 +57,8 @@ public partial class login : class_login
             if (DB_login_authority(ad_id, ad_ps, "NAD") != null)
             {
                 Session["OK"] = DB_login_authority(ad_id, ad_ps, "NAD"); //儲存顯示名稱
+                Session["id"] = ad_id; //工號
+                Session["ac"] = ad_id; //帳號
                 Record("NAD"); //紀錄登入使用者
                 Response.Redirect("blank.aspx"); //登入成功跳轉空白頁面
                 return;
@@ -73,11 +82,12 @@ public partial class login : class_login
                 {
                     //判斷部門是否符合權限
                     string att = sr.GetDirectoryEntry().Properties[atestarr[0]].Value.ToString();
-                    string[] str_s = att.Split('-');
-
-                    if (DB_login_authority(ad_id,ad_ps,"AD") == "1")
+                    string[] list_auth = DB_login_authority(ad_id, ad_ps, "AD").Split('-');
+                    if (list_auth [0]== "1")
                     {
-                        Session["OK"] = att; //儲存顯示名稱
+                        Session["OK"] = att; //顯示名稱
+                        Session["id"] = list_auth[1]; //工號
+                        Session["ac"] = ad_id; //帳號
                         Record(); //紀錄登入使用者
                         Response.Redirect("blank.aspx"); //登入成功跳轉空白頁面
                     }

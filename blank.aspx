@@ -1,10 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage_home.master" AutoEventWireup="true" CodeFile="blank.aspx.cs" Inherits="blank" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-   
-
-     <%-- 字體-Playfair Display --%>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <%-- 字體-Playfair Display --%>
     <link href="Content/fonts_playfair.css" rel="stylesheet" />
+    <%--<script type='text/javascript'>
+        (function () {
+            const myChannel = new BroadcastChannel('myChannel');
+            myChannel.onmessage = () => {
+                document.location.replace('/login.aspx');
+            }
+            myChannel.postMessage('page opened');
+        })();
+    </script>--%>
 
     <style type="text/css">
         /* 變更預設字型 */
@@ -16,7 +23,7 @@
         body {
             margin: 0px;
             padding: 0px;
-            background:url('../img/bg_masterpage.jpg') center center fixed no-repeat;
+            background: url('../img/bg_masterpage.jpg') center center fixed no-repeat;
             background-size: cover;
         }
 
@@ -30,14 +37,14 @@
     </style>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-        <div class="container">
-            <div class="row">
-                <div class="wrap-headline text-center">
-
-                    <asp:Label ID="lb_txt" runat="server" Text="" ForeColor="Gray"></asp:Label>
-                </div>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <div class="container">
+        <div class="row">
+            <div class="wrap-headline text-center">
+                <asp:Label ID="lb_txt" runat="server" Text="" ForeColor="Gray"></asp:Label>
             </div>
         </div>
+    </div>
+    
 </asp:Content>
 
